@@ -62,6 +62,8 @@ val scalaTestVersion = "3.2.19"
 val sttpVersion      = "4.0.8"
 
 val `ch.qos.logback_logback-classic`           = "ch.qos.logback"                 % "logback-classic" % "1.5.18"
+val `com.github.tototoshi_scala-csv`           = "com.github.tototoshi"          %% "scala-csv"       % "2.0.0"
+val `com.open-meteo_sdk`                       = "com.open-meteo"                 % "sdk"             % "1.10.0"
 val `com.softwaremill.sttp.client_core`        = "com.softwaremill.sttp.client4" %% "core"            % sttpVersion
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging"    %% "scala-logging"   % "3.9.5"
 val `org.scalacheck_scalacheck`                = "org.scalacheck"                %% "scalacheck"      % "1.18.1"               % Test
@@ -83,9 +85,18 @@ def projectWithName(name: String, file: File): Project =
     Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
   )
 
-lazy val `download` = projectWithName("download", file("download"))
+lazy val `data` = projectWithName("data", file("data"))
   .settings(libraryDependencies ++= Seq(`com.softwaremill.sttp.client_core`))
+  .dependsOn(mean)
+  .dependsOn(`mean` % "test->test")
+
+lazy val `file-data` = projectWithName("file-data", file("filedata"))
+  .settings(libraryDependencies ++= Seq(`com.softwaremill.sttp.client_core`, `com.github.tototoshi_scala-csv`))
+  .dependsOn(`data`, `mean`)
+  .dependsOn(`mean` % "test->test")
+
 lazy val `mean` = projectWithName("mean", file("mean"))
 
-lazy val `average` = projectWithName("average", file("average"))
-  .dependsOn(`download`, `mean`)
+lazy val `openmeteo` = projectWithName("openmeteo", file("openmeteo"))
+  .dependsOn(`data`)
+  .dependsOn(`mean` % "test->test")
