@@ -2,7 +2,7 @@ package pl.maniecek.fileData
 
 import com.github.tototoshi.csv.*
 import com.typesafe.scalalogging.StrictLogging
-import pl.jozwik.mean.{DateTimeUtils, HourlyData}
+import pl.jozwik.mean.{ DateTimeUtils, HourlyData }
 import pl.jozwik.mean.model.Temperature
 import pl.maniecek.mean.MapHourlyData
 
@@ -23,7 +23,7 @@ object HourlyDataHelper extends StrictLogging {
         case (Success(_), None) =>
           acc
         case (Failure(th), _) =>
-          logger.error("", th)
+          logger.trace("", th)
           acc
       }
     }

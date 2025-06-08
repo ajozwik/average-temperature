@@ -9,6 +9,7 @@ import scala.annotation.tailrec
 import scala.io.{ Codec, Source }
 
 class FileHourlyDataSpec extends AbstractSpec {
+  private val days = 365
 
   "FileHourlyDataSpec" should {
     "Read csv " in {
@@ -19,9 +20,10 @@ class FileHourlyDataSpec extends AbstractSpec {
       val fromTo     = hourlyData.fromTo
       fromTo should not be empty
       fromTo match {
-        case Some((from, to)) =>
-          val (mean4, mean8) = loop(hourlyData, from, to, 0, 0)
-          logger.debug(s"$mean4 $mean8")
+        case Some((from, _)) =>
+          val t              = from.plusDays(days)
+          val (mean4, mean8) = loop(hourlyData, from, t, 0, 0)
+          logger.debug(s"${mean4 / days} ${mean8 / days}")
       }
 
     }
