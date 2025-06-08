@@ -1,8 +1,9 @@
 package pl.maniecek.mean
 
+import pl.jozwik.mean.HourlyData
 import pl.jozwik.mean.model.Temperature
 
-import java.time.{ LocalDate, LocalDateTime }
+import java.time.{LocalDate, LocalDateTime}
 
 final case class MapHourlyData(private val map: Map[LocalDateTime, Temperature]) extends HourlyData {
 

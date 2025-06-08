@@ -1,4 +1,4 @@
-package pl.maniecek.mean
+package pl.jozwik.mean
 
 import pl.jozwik.mean.model.Temperature
 

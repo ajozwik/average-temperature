@@ -87,7 +87,7 @@ def projectWithName(name: String, file: File): Project =
 
 lazy val `data` = projectWithName("data", file("data"))
   .settings(libraryDependencies ++= Seq(`com.softwaremill.sttp.client_core`))
-  .dependsOn(mean)
+  .dependsOn(`mean`)
   .dependsOn(`mean` % "test->test")
 
 lazy val `file-data` = projectWithName("file-data", file("filedata"))
