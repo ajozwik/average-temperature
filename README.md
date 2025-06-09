@@ -42,10 +42,9 @@ T4 = (T06 + T18 + Tmax + Tmin) / 4
 T8 = (T00 + T03 + T06 + T09 + T12 + T15 + T18 + T21) / 8
 ```
 * pl.maniecek.average.Average.average24
-```
+  
 T24 = $$\sum_{i=1}^n T_i$$
 
-```
 How to run:
 First install sbt (https://www.scala-sbt.org/download/) and at least jdk 11.
 
