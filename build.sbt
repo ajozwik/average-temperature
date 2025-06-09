@@ -83,18 +83,20 @@ def projectWithName(name: String, file: File): Project =
     Compile / doc / sources := Seq.empty
   )
 
+lazy val `average` = projectWithName("average", file("average"))
+
 lazy val `data` = projectWithName("data", file("data"))
   .settings(libraryDependencies ++= Seq(`com.softwaremill.sttp.client_core`))
-  .dependsOn(`mean`)
-  .dependsOn(`mean` % "test->test")
+  .dependsOn(`average`)
+  .dependsOn(`average` % "test->test")
 
 lazy val `file-data` = projectWithName("file-data", file("filedata"))
   .settings(libraryDependencies ++= Seq(`com.softwaremill.sttp.client_core`, `com.github.tototoshi_scala-csv`))
-  .dependsOn(`data`, `mean`)
-  .dependsOn(`mean` % "test->test")
-
-lazy val `mean` = projectWithName("mean", file("mean"))
-
-lazy val `openmeteo` = projectWithName("openmeteo", file("openmeteo"))
   .dependsOn(`data`)
-  .dependsOn(`mean` % "test->test")
+  .dependsOn(`average` % "test->test")
+
+lazy val `openmeteo` = projectWithName("open-meteo", file("openmeteo"))
+  .settings(packMain := Map("openmeteo" -> "pl.maniecek.openmeteo.Main"))
+  .dependsOn(`file-data`)
+  .dependsOn(`average` % "test->test")
+  .enablePlugins(PackPlugin)

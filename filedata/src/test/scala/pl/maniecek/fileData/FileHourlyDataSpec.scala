@@ -1,7 +1,7 @@
 package pl.maniecek.fileData
 
-import pl.jozwik.mean.{ Mean, YearAggregator }
-import pl.maniecek.mean.AbstractSpec
+import pl.maniecek.average.{ Average, YearAggregator }
+import pl.maniecek.average.AbstractSpec
 
 import java.time.format.DateTimeFormatter
 import scala.io.{ Codec, Source }
@@ -19,9 +19,9 @@ class FileHourlyDataSpec extends AbstractSpec {
       fromTo match {
         case Some((from, _)) =>
           val year  = from.getYear
-          val mean2 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean2)
-          val mean4 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean4)
-          val mean8 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean8)
+          val mean2 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Average.average2)
+          val mean4 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Average.average4)
+          val mean8 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Average.average8)
           logger.debug(s"${mean2.celsius} ${mean4.celsius} ${mean8.celsius}")
         case _ =>
       }
