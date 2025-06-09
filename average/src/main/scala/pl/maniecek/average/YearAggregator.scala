@@ -9,7 +9,7 @@ import scala.annotation.tailrec
 
 object YearAggregator extends StrictLogging {
 
-  def yearAggregatorTemperature(year: Int, hourlyData: HourlyData)(implicit meanModel: (LocalDate, HourlyData) => Either[String, Temperature]): Temperature = {
+  def yearAggregatorTemperature(year: Int, hourlyData: HourlyData)(implicit average: (LocalDate, HourlyData) => Either[String, Temperature]): Temperature = {
     val start = LocalDate.ofYearDay(year, 1)
     val end   = start.plusYears(1).minusDays(1)
     val days  = ChronoUnit.DAYS.between(start, end) + 1
@@ -19,17 +19,17 @@ object YearAggregator extends StrictLogging {
 
   @tailrec
   private def loop(hourlyData: HourlyData, day: LocalDate, to: LocalDate, sum: BigDecimal)(implicit
-      meanModel: (LocalDate, HourlyData) => Either[String, Temperature]
+      average: (LocalDate, HourlyData) => Either[String, Temperature]
   ): BigDecimal =
     if (day.isBefore(to)) {
-      val m = average(hourlyData, day)(meanModel)
+      val m = averageUnsafe(hourlyData, day)(average)
       loop(hourlyData, day.plusDays(1), to, sum + m)
     } else {
       sum
     }
 
-  private def average(hourlyData: HourlyData, day: LocalDate)(implicit meanModel: (LocalDate, HourlyData) => Either[String, Temperature]): BigDecimal =
-    meanModel(day, hourlyData) match {
+  private def averageUnsafe(hourlyData: HourlyData, day: LocalDate)(implicit average: (LocalDate, HourlyData) => Either[String, Temperature]): BigDecimal =
+    average(day, hourlyData) match {
       case Right(m) =>
         m.celsius
       case Left(error) =>

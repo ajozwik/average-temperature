@@ -10,8 +10,9 @@ import scala.annotation.tailrec
 import scala.util.{ Failure, Success, Using }
 
 object Main extends ScalaApp {
-  private val tmpDir   = new File(scala.util.Properties.tmpDir, args.lift(3).getOrElse("weather"))
-  private val inputCsv = new File(args.headOption.getOrElse(sys.error("Provide csv with places: <file.csv> [fromYear] [toYear] [tmpDir]")))
+  private val tmpDir    = new File(scala.util.Properties.tmpDir, args.lift(3).getOrElse("weather"))
+  private val outputDir = new File(scala.util.Properties.tmpDir, args.lift(3).getOrElse("output"))
+  private val inputCsv  = new File(args.headOption.getOrElse(sys.error("Provide csv with places: <file.csv> [fromYear] [toYear] [tmpDir] [outputDir]")))
 
   private val startYear = args.lift(1).map(_.toInt).getOrElse(2000)
   private val endYear   = args.lift(2).map(_.toInt).getOrElse(LocalDate.now.getYear - 1)
@@ -24,7 +25,7 @@ object Main extends ScalaApp {
         downloadWeather(reader, startYear, endYear)
       }
   } {
-    HourlyDataHelper.allFromDir(tmpDir, startYear, endYear)
+    HourlyDataHelper.allFromDir(tmpDir, startYear, endYear)(outputDir)
   }
 
   @tailrec

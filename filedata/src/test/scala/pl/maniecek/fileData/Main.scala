@@ -14,8 +14,9 @@ object Main extends ScalaApp {
   }
 
   private def run(): Unit = {
-    val directory = new File("/tmp/weather")
-    HourlyDataHelper.allFromDir(directory, 2000, 2024)
+    val directory = new File("/tmp", "weather")
+    val output    = new File("/tmp", "output")
+    HourlyDataHelper.allFromDir(directory, 2000, 2024)(output)
 
   }
 
