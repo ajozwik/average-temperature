@@ -1,6 +1,6 @@
 package pl.maniecek.fileData
 
-import pl.jozwik.mean.{ HourlyData, YearAggregator }
+import pl.jozwik.mean.{ HourlyData, Mean, YearAggregator }
 import pl.maniecek.mean.ScalaApp
 
 import java.io.File
@@ -28,8 +28,11 @@ object Main extends ScalaApp {
   }
 
   private def aggregateForYear(name: String)(year: Int, hourlyData: HourlyData): Unit = {
-    val (mean4, mean8) = YearAggregator.yearAggregatorTemperature(year, hourlyData)
-    logger.debug(s"$name $year mean4=${mean4.celsius}, mean8=${mean8.celsius}  diff=${mean4.celsius - mean8.celsius}")
+    val mean2  = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean2)
+    val mean4  = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean4)
+    val mean8  = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean8)
+    val mean24 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean24)
+    logger.debug(s"$name $year mean2=${mean2.print}, mean4=${mean4.print}, mean8=${mean8.print} mean24=${mean24.print}")
   }
 
   private def fromCsvFile(file: File): HourlyData =

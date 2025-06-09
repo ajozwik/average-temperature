@@ -1,13 +1,12 @@
 package pl.maniecek.fileData
 
-import pl.jozwik.mean.YearAggregator
+import pl.jozwik.mean.{ Mean, YearAggregator }
 import pl.maniecek.mean.AbstractSpec
 
 import java.time.format.DateTimeFormatter
 import scala.io.{ Codec, Source }
 
 class FileHourlyDataSpec extends AbstractSpec {
-  private val days = 365
 
   "FileHourlyDataSpec" should {
     "Read csv " in {
@@ -19,8 +18,11 @@ class FileHourlyDataSpec extends AbstractSpec {
       fromTo should not be empty
       fromTo match {
         case Some((from, _)) =>
-          val (mean4, mean8) = YearAggregator.yearAggregatorTemperature(from.getYear, hourlyData)
-          logger.debug(s"${mean4.celsius / days} ${mean8.celsius / days}")
+          val year  = from.getYear
+          val mean2 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean2)
+          val mean4 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean4)
+          val mean8 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(Mean.mean8)
+          logger.debug(s"${mean2.celsius} ${mean4.celsius} ${mean8.celsius}")
         case _ =>
       }
 

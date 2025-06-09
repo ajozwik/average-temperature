@@ -9,28 +9,30 @@ import scala.annotation.tailrec
 
 object YearAggregator extends StrictLogging {
 
-  def yearAggregatorTemperature(year: Int, hourlyData: HourlyData): (Temperature, Temperature) = {
-    val start          = LocalDate.ofYearDay(year, 1)
-    val end            = start.plusYears(1).minusDays(1)
-    val days           = ChronoUnit.DAYS.between(start, end) + 1
-    val (mean4, mean8) = loop(hourlyData, start, end, 0, 0)
-    (Temperature(mean4 / days), Temperature(mean8 / days))
+  def yearAggregatorTemperature(year: Int, hourlyData: HourlyData)(implicit meanModel: (LocalDate, HourlyData) => Option[Temperature]): Temperature = {
+    val start = LocalDate.ofYearDay(year, 1)
+    val end   = start.plusYears(1).minusDays(1)
+    val days  = ChronoUnit.DAYS.between(start, end) + 1
+    val sum   = loop(hourlyData, start, end, 0)
+    Temperature(sum / days)
   }
 
   @tailrec
-  private def loop(hourlyData: HourlyData, day: LocalDate, to: LocalDate, sum4: BigDecimal, sum8: BigDecimal): (BigDecimal, BigDecimal) =
+  private def loop(hourlyData: HourlyData, day: LocalDate, to: LocalDate, sum: BigDecimal)(implicit
+      meanModel: (LocalDate, HourlyData) => Option[Temperature]
+  ): BigDecimal =
     if (day.isBefore(to)) {
-      val (mean4, mean8) = mean(hourlyData, day)
-      loop(hourlyData, day.plusDays(1), to, sum4 + mean4, sum8 + mean8)
+      val m = mean(hourlyData, day)(meanModel)
+      loop(hourlyData, day.plusDays(1), to, sum + m)
     } else {
-      (sum4, sum8)
+      sum
     }
 
-  private def mean(hourlyData: HourlyData, day: LocalDate): (BigDecimal, BigDecimal) =
-    (Mean.mean8(day, hourlyData), Mean.mean4(day, hourlyData)) match {
-      case (Some(mean4), Some(mean8)) =>
-        (mean4.celsius, mean8.celsius)
+  private def mean(hourlyData: HourlyData, day: LocalDate)(implicit meanModel: (LocalDate, HourlyData) => Option[Temperature]): BigDecimal =
+    meanModel(day, hourlyData) match {
+      case Some(m) =>
+        m.celsius
       case _ =>
-        (0, 0)
+        sys.error("Wrong data")
     }
 }

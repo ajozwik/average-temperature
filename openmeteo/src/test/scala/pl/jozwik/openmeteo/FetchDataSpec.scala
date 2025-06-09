@@ -8,10 +8,11 @@ import scala.util.{ Failure, Success }
 
 object FetchDataSpec extends ScalaApp {
 
-  private val latitude   = BigDecimal("47.5585")
-  private val longitude  = BigDecimal("7.58085")
+  private val latitude   = BigDecimal("53.091607")
+  private val longitude  = BigDecimal("23.153443")
   private val tz         = ZoneId.of("Europe/Warsaw")
-  private val outputFile = new File(scala.util.Properties.tmpDir, "Basel.csv")
+  private val tmpDir     = new File(scala.util.Properties.tmpDir, "weather")
+  private val outputFile = new File(tmpDir, "Białystok.csv")
 
   fetch(latitude, longitude)(tz)
 
