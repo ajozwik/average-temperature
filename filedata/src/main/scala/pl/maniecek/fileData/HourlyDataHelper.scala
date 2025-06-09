@@ -2,9 +2,8 @@ package pl.maniecek.fileData
 
 import com.github.tototoshi.csv.*
 import com.typesafe.scalalogging.StrictLogging
-import pl.jozwik.mean.{ DateTimeUtils, HourlyData }
+import pl.jozwik.mean.{ DateTimeUtils, HourlyData, MapHourlyData }
 import pl.jozwik.mean.model.Temperature
-import pl.maniecek.mean.MapHourlyData
 
 import java.io.File
 import java.time.LocalDateTime
@@ -35,8 +34,8 @@ object HourlyDataHelper extends StrictLogging {
     MapHourlyData(map)
   }
 
-  def fromCsvFile(file: File)(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME): Try[HourlyData] =
-    Using(Source.fromFile(file)(Codec.UTF8)) { reader =>
+  def fromCsvFile(file: File, formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME)(implicit codec: Codec): Try[HourlyData] =
+    Using(Source.fromFile(file)) { reader =>
       fromCsv(reader)(formatter)
     }.flatten
 

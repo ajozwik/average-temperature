@@ -34,7 +34,6 @@ object Mean {
         case _ =>
           None
       }
-
     } else {
       None
     }
