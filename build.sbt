@@ -50,12 +50,12 @@ ThisBuild / wartremoverWarnings ++= Warts.allBut(
   Wart.ImplicitConversion,
   Wart.ImplicitParameter,
   Wart.JavaSerializable,
+  Wart.NonUnitStatements,
   Wart.Nothing,
   Wart.Overloading,
   Wart.StringPlusAny,
-  Wart.ToString,
   Wart.Throw,
-  Wart.NonUnitStatements
+  Wart.ToString
 )
 
 val scalaTestVersion = "3.2.19"
@@ -63,7 +63,6 @@ val sttpVersion      = "4.0.8"
 
 val `ch.qos.logback_logback-classic`           = "ch.qos.logback"                 % "logback-classic" % "1.5.18"
 val `com.github.tototoshi_scala-csv`           = "com.github.tototoshi"          %% "scala-csv"       % "2.0.0"
-val `com.open-meteo_sdk`                       = "com.open-meteo"                 % "sdk"             % "1.10.0"
 val `com.softwaremill.sttp.client_core`        = "com.softwaremill.sttp.client4" %% "core"            % sttpVersion
 val `com.typesafe.scala-logging_scala-logging` = "com.typesafe.scala-logging"    %% "scala-logging"   % "3.9.5"
 val `org.scalacheck_scalacheck`                = "org.scalacheck"                %% "scalacheck"      % "1.18.1"               % Test
@@ -81,8 +80,7 @@ def projectWithName(name: String, file: File): Project =
     ),
     licenseReportTitle      := s"Copyright (c) ${java.time.LocalDate.now.getYear} Andrzej Jozwik",
     licenseSelection        := Seq(LicenseCategory.MIT),
-    Compile / doc / sources := Seq.empty,
-    Compile / compile / wartremoverWarnings ++= Warts.allBut(Wart.ImplicitParameter, Wart.DefaultArguments)
+    Compile / doc / sources := Seq.empty
   )
 
 lazy val `data` = projectWithName("data", file("data"))

@@ -1,12 +1,11 @@
 package pl.maniecek.download
 
-import com.typesafe.scalalogging.StrictLogging
-import pl.maniecek.mean.DownloadUtils
+import pl.maniecek.mean.{ DownloadUtils, ScalaApp }
 
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-object DownloadTest extends App with StrictLogging {
+object DownloadTest extends ScalaApp {
   private val json =
     """{"units":{"temperature":"CELSIUS","velocity":"KILOMETER_PER_HOUR","length":"metric","energy":"watts"},"geometry":{"type":"MultiPoint","coordinates":[[7.57327,47.5584,279]],"locationNames":["Bazylea"]},"format":"csvTimeOriented","timeIntervals":["2024-01-01T+00:00\/2025-06-08T+00:00"],"timeIntervalsAlignment":"none","queries":[{"domain":"ERA5T","timeResolution":"hourly","codes":[{"code":11,"level":"2 m elevation corrected"}]}]}"""
 

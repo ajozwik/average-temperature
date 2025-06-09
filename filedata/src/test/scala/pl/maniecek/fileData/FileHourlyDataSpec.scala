@@ -24,6 +24,7 @@ class FileHourlyDataSpec extends AbstractSpec {
           val t              = from.plusDays(days)
           val (mean4, mean8) = loop(hourlyData, from, t, 0, 0)
           logger.debug(s"${mean4 / days} ${mean8 / days}")
+        case _ =>
       }
 
     }
