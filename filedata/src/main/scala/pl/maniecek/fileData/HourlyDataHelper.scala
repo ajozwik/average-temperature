@@ -65,7 +65,7 @@ object HourlyDataHelper extends StrictLogging {
     val file = new File(outputDir, s"${name}_$averageName.csv")
     file.getParentFile.mkdirs()
     val output = new PrintWriter(file)
-    output.println("year,temperature")
+    output.println(s"year,$averageName")
     for { year <- (startYear to endYear) } {
       val a2 = YearAggregator.yearAggregatorTemperature(year, hourlyData)(average)
       logger.debug(s"$name $year ${a2.print}")

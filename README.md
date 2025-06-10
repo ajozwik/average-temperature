@@ -79,4 +79,9 @@ bin/openmeteo example.csv 2000 2024
 
 For windows use \ instead of /
 
+For merging result use merge.py (change /tmp/output to your output dir):
+
+``
+python merge.py /tmp/output Basel
+``
 
